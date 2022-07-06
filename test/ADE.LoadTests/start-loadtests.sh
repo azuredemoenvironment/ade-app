@@ -1,2 +1,2 @@
-docker-compose build ade_loadtesting_gatling
-docker-compose up ade_loadtesting_gatling
+docker-compose build ade-loadtesting-gatling
+docker-compose up ade-loadtesting-gatling

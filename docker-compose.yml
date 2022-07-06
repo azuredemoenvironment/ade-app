@@ -5,20 +5,20 @@ services:
   ########################################################
   # These images are the main application that gets
   # deployed to the IaaS, PaaS, and AKS infrastructure
-  ade_reverseproxy:
+  ade-reverseproxy:
     # Provides a reverse-proxy to allow hostname-based
     # access to services inside our container network
     image: nginx:latest
-    container_name: ade_reverseproxy
+    container_name: ade-reverseproxy
     volumes:
       - ./src/ADE.Local/ADE.ReverseProxy/nginx.conf:/etc/nginx/nginx.conf
       - ./src/ADE.Local/ADE.ReverseProxy/logs/:/etc/nginx/logs/
     ports:
       - 8080:8080
       - 8888:8888
-  ade_apigateway:
+  ade-apigateway:
     image: ade-apigateway
-    container_name: ade_apigateway
+    container_name: ade-apigateway
     build:
       context: ./src/ADE.Services/src/
       dockerfile: ./ADE.ApiGateway/Dockerfile
@@ -43,7 +43,7 @@ services:
       - ASPNETCORE_URLS
       - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
       - LOGGING__LOGLEVEL__DEFAULT
-  ade_frontend:
+  ade-frontend:
     image: ade-frontend
     container_name: frontend
     build:
@@ -56,9 +56,9 @@ services:
     environment:
       - CONNECTIONSTRINGS__APPCONFIG
       - ADE__ENVIRONMENT
-  ade_dataingestorservice:
+  ade-dataingestorservice:
     image: ade-dataingestorservice
-    container_name: ade_dataingestorservice
+    container_name: ade-dataingestorservice
     build:
       context: ./src/ADE.Services/src/
       dockerfile: ./ADE.DataIngestorService/Dockerfile
@@ -83,9 +83,9 @@ services:
       - CONNECTIONSTRINGS__APPCONFIG
       - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
       - LOGGING__LOGLEVEL__DEFAULT
-  ade_userservice:
+  ade-userservice:
     image: ade-userservice
-    container_name: ade_userservice
+    container_name: ade-userservice
     build:
       context: ./src/ADE.Services/src/
       dockerfile: ./ADE.UserService/Dockerfile
@@ -110,9 +110,9 @@ services:
       - CONNECTIONSTRINGS__APPCONFIG
       - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
       - LOGGING__LOGLEVEL__DEFAULT
-  ade_datareporterservice:
+  ade-datareporterservice:
     image: ade-datareporterservice
-    container_name: ade_datareporterservice
+    container_name: ade-datareporterservice
     build:
       context: ./src/ADE.Services/src/
       dockerfile: ./ADE.DataReporterService/Dockerfile
@@ -137,9 +137,9 @@ services:
       - CONNECTIONSTRINGS__APPCONFIG
       - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
       - LOGGING__LOGLEVEL__DEFAULT
-  ade_eventingestorservice:
+  ade-eventingestorservice:
     image: ade-eventingestorservice
-    container_name: ade_eventingestorservice
+    container_name: ade-eventingestorservice
     build:
       context: ./src/ADE.Services/src/
       dockerfile: ./ADE.EventIngestorService/Dockerfile
@@ -167,15 +167,15 @@ services:
   # Load Testing
   ########################################################
   # These images run load tests against the ADE app
-  ade_loadtesting_gatling:
+  ade-loadtesting-gatling:
     image: ade-loadtesting-gatling
-    container_name: ade_loadtesting_gatling
+    container_name: ade-loadtesting-gatling
     build:
       context: ./test/ADE.LoadTests/gatling
       dockerfile: ./Dockerfile
     network_mode: host
     depends_on:
-      - ade_loadtesting_grafana
+      - ade-loadtesting-grafana
     environment:
       - JAVA_OPTS=-Dgatling.data.graphite.host=${GRAPHITE_HOST}
         -Dgatling.data.graphite.port=${GRAPHITE_PORT}
@@ -189,7 +189,7 @@ services:
       - ./test/ADE.LoadTests/gatling/results:/opt/gatling/results
       - ./test/ADE.LoadTests/gatling/simulations:/opt/gatling/user-files/simulations:cached
       - ./test/ADE.LoadTests/gatling/data:/opt/gatling/user-files/data:cached
-  ade_loadtesting_redis:
+  ade-loadtesting-redis:
     image: ade-loadtesting-redis
     container_name: redis
     build:
@@ -197,7 +197,7 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "6379:6379"
-  ade_loadtesting_influxdb:
+  ade-loadtesting-influxdb:
     image: ade-loadtesting-influxdb
     container_name: influxdb
     build:
@@ -207,7 +207,7 @@ services:
       - "8083:8083"
       - "8086:8086"
       - "2003:2003"
-  ade_loadtesting_grafana:
+  ade-loadtesting-grafana:
     image: ade-loadtesting-grafana
     container_name: grafana
     build:

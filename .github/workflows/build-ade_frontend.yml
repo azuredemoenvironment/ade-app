@@ -6,12 +6,12 @@ on:
       - src/ADE.FrontEnd/**
       - .github/workflows/**
 
-name: Build Container - ade_frontend
+name: Build Container - ade-frontend
 
 jobs:
   build-image:
     name: Build and Publish Image
     uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
     with:
-      image_to_push: ade_frontend
+      image_to_push: ade-frontend
       tag_name: ${GITHUB_REF/refs\/tags\//}

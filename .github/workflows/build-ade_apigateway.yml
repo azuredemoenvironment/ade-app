@@ -6,12 +6,12 @@ on:
       - src/ADE.Services/**
       - .github/workflows/**
 
-name: Build Container - ade_apigateway
+name: Build Container - ade-apigateway
 
 jobs:
   build-image:
     name: Build and Publish Image
     uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
     with:
-      image_to_push: ade_apigateway
+      image_to_push: ade-apigateway
       tag_name: ${GITHUB_REF/refs\/tags\//}
