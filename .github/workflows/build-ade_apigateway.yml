@@ -2,6 +2,8 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch:
+    
 
 name: Build Container - ade_apigateway
 
