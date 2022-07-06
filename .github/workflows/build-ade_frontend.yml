@@ -1,8 +1,6 @@
 on:
   workflow_dispatch:
   push:
-    tags:
-      - "*"
 
 name: Build Container - ade_frontend
 
