@@ -39,9 +39,9 @@ jobs:
 
       - name: Create Tag
         run: |
-          IMAGE_TAG=$IMAGE_PATH:${{ inputs.tag_name }}
+          IMAGE_TAG=$IMAGE_PATH:$(echo ${{ inputs.tag_name }} |  | sed 's/[^a-zA-Z0-9]/-/g')
           # Make characters lowercase
-          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]' | sed 's/[^a-zA-Z0-9]/-/g')
+          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
           echo "Tagging ${{ inputs.image_to_push }} with $IMAGE_TAG in GitHub Container Registry"
           docker tag ${{ inputs.image_to_push }} $IMAGE_TAG
 
