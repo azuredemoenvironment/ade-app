@@ -8,7 +8,7 @@ name: Build Container - ade_apigateway
 jobs:      
   build-image:
     name: Build and Publish Image
-    uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml
+    uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
     with:
       image_to_push: ade_apigateway
       tag_name: ${GITHUB_REF/refs\/tags\//}
