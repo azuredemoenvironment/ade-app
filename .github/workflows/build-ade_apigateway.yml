@@ -1,8 +1,9 @@
 on:
   workflow_dispatch:
   push:
-    tags:
-      - "*"
+    paths:
+      - docker-compose.yml
+      - src/ADE.Services/**
 
 name: Build Container - ade_apigateway
 

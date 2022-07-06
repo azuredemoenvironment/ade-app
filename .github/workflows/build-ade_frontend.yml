@@ -1,6 +1,9 @@
 on:
   workflow_dispatch:
   push:
+    paths:
+      - docker-compose.yml
+      - src/ADE.FrontEnd/**
 
 name: Build Container - ade_frontend
 
