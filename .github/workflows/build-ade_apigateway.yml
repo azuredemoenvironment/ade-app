@@ -1,13 +1,12 @@
 on:
+  workflow_dispatch:
   push:
     tags:
-      - '*'
-  workflow_dispatch:
-    
+      - "*"
 
 name: Build Container - ade_apigateway
 
-jobs:      
+jobs:
   build-image:
     name: Build and Publish Image
     uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
