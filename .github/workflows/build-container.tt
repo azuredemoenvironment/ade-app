@@ -1,0 +1,18 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - docker-compose.yml
+      - .github/workflows/**
+      - @@TRIGGER_PATH@@
+
+name: Build Container Image - @@IMAGE_NAME@@
+
+jobs:
+  build-image:
+    name: Build and Publish Image @@IMAGE_NAME@@
+    uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
+    with:
+      image_to_push: @@IMAGE_NAME@@
+      tag_name: ${GITHUB_REF/refs\/tags\//}
+      tag_latest: ${{github.ref == 'refs/heads/main'}}

@@ -1,0 +1,220 @@
+version: "3.8"
+
+services:
+  # ADE App
+  ########################################################
+  # These images are the main application that gets
+  # deployed to the IaaS, PaaS, and AKS infrastructure
+  ade-reverseproxy:
+    # Provides a reverse-proxy to allow hostname-based
+    # access to services inside our container network
+    image: nginx:latest
+    container_name: ade-reverseproxy
+    volumes:
+      - ./src/ADE.Local/ADE.ReverseProxy/nginx.conf:/etc/nginx/nginx.conf
+      - ./src/ADE.Local/ADE.ReverseProxy/logs/:/etc/nginx/logs/
+    ports:
+      - 8080:8080
+      - 8888:8888
+  ade-apigateway:
+    image: ade-apigateway
+    container_name: ade-apigateway
+    build:
+      context: ./src/ADE.Services/src/
+      dockerfile: ./ADE.ApiGateway/Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - ADE__APIGATEWAYURI
+      - ADE__BLOBSTORAGECONNECTIONSTRING
+      - ADE__COSMOSDBCONNECTIONSTRING
+      - ADE__DATAINGESTORSERVICEURI
+      - ADE__DATAREPORTERSERVICEURI
+      - ADE__ENVIRONMENT
+      - ADE__MARIADBCONNECTIONSTRING
+      - ADE__POSTGRESQLCONNECTIONSTRING
+      - ADE__SQLSERVERCONNECTIONSTRING
+      - ADE__USERSERVICEURI
+      - CONNECTIONSTRINGS__APPCONFIG
+      - APPLICATIONINSIGHTS__CONNECTIONSTRING
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS
+      - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
+      - LOGGING__LOGLEVEL__DEFAULT
+  ade-frontend:
+    image: ade-frontend
+    container_name: frontend
+    build:
+      context: ./src/ADE.FrontEnd/
+      dockerfile: ./Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - CONNECTIONSTRINGS__APPCONFIG
+      - ADE__ENVIRONMENT
+  ade-dataingestorservice:
+    image: ade-dataingestorservice
+    container_name: ade-dataingestorservice
+    build:
+      context: ./src/ADE.Services/src/
+      dockerfile: ./ADE.DataIngestorService/Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - ADE__APIGATEWAYURI
+      - ADE__BLOBSTORAGECONNECTIONSTRING
+      - ADE__COSMOSDBCONNECTIONSTRING
+      - ADE__DATAINGESTORSERVICEURI
+      - ADE__DATAREPORTERSERVICEURI
+      - ADE__ENVIRONMENT
+      - ADE__MARIADBCONNECTIONSTRING
+      - ADE__POSTGRESQLCONNECTIONSTRING
+      - ADE__SQLSERVERCONNECTIONSTRING
+      - ADE__USERSERVICEURI
+      - APPLICATIONINSIGHTS__CONNECTIONSTRING
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS
+      - CONNECTIONSTRINGS__APPCONFIG
+      - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
+      - LOGGING__LOGLEVEL__DEFAULT
+  ade-userservice:
+    image: ade-userservice
+    container_name: ade-userservice
+    build:
+      context: ./src/ADE.Services/src/
+      dockerfile: ./ADE.UserService/Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - ADE__APIGATEWAYURI
+      - ADE__BLOBSTORAGECONNECTIONSTRING
+      - ADE__COSMOSDBCONNECTIONSTRING
+      - ADE__DATAINGESTORSERVICEURI
+      - ADE__DATAREPORTERSERVICEURI
+      - ADE__ENVIRONMENT
+      - ADE__MARIADBCONNECTIONSTRING
+      - ADE__POSTGRESQLCONNECTIONSTRING
+      - ADE__SQLSERVERCONNECTIONSTRING
+      - ADE__USERSERVICEURI
+      - APPLICATIONINSIGHTS__CONNECTIONSTRING
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS
+      - CONNECTIONSTRINGS__APPCONFIG
+      - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
+      - LOGGING__LOGLEVEL__DEFAULT
+  ade-datareporterservice:
+    image: ade-datareporterservice
+    container_name: ade-datareporterservice
+    build:
+      context: ./src/ADE.Services/src/
+      dockerfile: ./ADE.DataReporterService/Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - ADE__APIGATEWAYURI
+      - ADE__BLOBSTORAGECONNECTIONSTRING
+      - ADE__COSMOSDBCONNECTIONSTRING
+      - ADE__DATAINGESTORSERVICEURI
+      - ADE__DATAREPORTERSERVICEURI
+      - ADE__ENVIRONMENT
+      - ADE__MARIADBCONNECTIONSTRING
+      - ADE__POSTGRESQLCONNECTIONSTRING
+      - ADE__SQLSERVERCONNECTIONSTRING
+      - ADE__USERSERVICEURI
+      - APPLICATIONINSIGHTS__CONNECTIONSTRING
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS
+      - CONNECTIONSTRINGS__APPCONFIG
+      - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
+      - LOGGING__LOGLEVEL__DEFAULT
+  ade-eventingestorservice:
+    image: ade-eventingestorservice
+    container_name: ade-eventingestorservice
+    build:
+      context: ./src/ADE.Services/src/
+      dockerfile: ./ADE.EventIngestorService/Dockerfile
+      args:
+        - BuildConfiguration
+    expose:
+      - "80"
+    environment:
+      - ADE__APIGATEWAYURI
+      - ADE__BLOBSTORAGECONNECTIONSTRING
+      - ADE__COSMOSDBCONNECTIONSTRING
+      - ADE__DATAINGESTORSERVICEURI
+      - ADE__DATAREPORTERSERVICEURI
+      - ADE__ENVIRONMENT
+      - ADE__MARIADBCONNECTIONSTRING
+      - ADE__POSTGRESQLCONNECTIONSTRING
+      - ADE__SQLSERVERCONNECTIONSTRING
+      - ADE__USERSERVICEURI
+      - APPLICATIONINSIGHTS__CONNECTIONSTRING
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS
+      - CONNECTIONSTRINGS__APPCONFIG
+      - LOGGING__CONSOLE__LOGLEVEL__DEFAULT
+      - LOGGING__LOGLEVEL__DEFAULT
+  # Load Testing
+  ########################################################
+  # These images run load tests against the ADE app
+  ade-loadtesting-gatling:
+    image: ade-loadtesting-gatling
+    container_name: ade-loadtesting-gatling
+    build:
+      context: ./test/gatling
+      dockerfile: ./Dockerfile
+    network_mode: host
+    depends_on:
+      - ade-loadtesting-grafana
+    environment:
+      - JAVA_OPTS=-Dgatling.data.graphite.host=${GRAPHITE_HOST}
+        -Dgatling.data.graphite.port=${GRAPHITE_PORT}
+        -DwebFrontEndDomain=${WEB_FRONTEND_DOMAIN}
+        -DwebBackEndDomain=${WEB_BACKEND_DOMAIN} -DredisHost=${REDIS_HOST}
+        -DredisPort=${REDIS_PORT} -DusersPerSecond=${USERS_PER_SECOND}
+        -DmaxUsersPerSecond=${MAX_USERS_PER_SECOND}
+        -DoverMinutes=${OVER_MINUTES} -Djsse.enableSNIExtension=false
+    volumes:
+      - ./test/gatling/conf:/opt/gatling/conf:cached
+      - ./test/gatling/results:/opt/gatling/results
+      - ./test/gatling/simulations:/opt/gatling/user-files/simulations:cached
+      - ./test/gatling/data:/opt/gatling/user-files/data:cached
+  ade-loadtesting-redis:
+    image: ade-loadtesting-redis
+    container_name: redis
+    build:
+      context: ./test/redis
+      dockerfile: ./Dockerfile
+    ports:
+      - "6379:6379"
+  ade-loadtesting-influxdb:
+    image: ade-loadtesting-influxdb
+    container_name: influxdb
+    build:
+      context: ./test/influxdb
+      dockerfile: ./Dockerfile
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "2003:2003"
+  ade-loadtesting-grafana:
+    image: ade-loadtesting-grafana
+    container_name: grafana
+    build:
+      context: ./test/grafana
+      dockerfile: ./Dockerfile
+    environment:
+      - INFLUXDB_HOSTNAME
+      - INFLUXDB_PORT
+    ports:
+      - "3000:3000"
