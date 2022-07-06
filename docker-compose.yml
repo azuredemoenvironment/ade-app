@@ -171,7 +171,7 @@ services:
     image: ade-loadtesting-gatling
     container_name: ade-loadtesting-gatling
     build:
-      context: ./test/ADE.LoadTests/gatling
+      context: ./test/gatling
       dockerfile: ./Dockerfile
     network_mode: host
     depends_on:
@@ -185,15 +185,15 @@ services:
         -DmaxUsersPerSecond=${MAX_USERS_PER_SECOND}
         -DoverMinutes=${OVER_MINUTES} -Djsse.enableSNIExtension=false
     volumes:
-      - ./test/ADE.LoadTests/gatling/conf:/opt/gatling/conf:cached
-      - ./test/ADE.LoadTests/gatling/results:/opt/gatling/results
-      - ./test/ADE.LoadTests/gatling/simulations:/opt/gatling/user-files/simulations:cached
-      - ./test/ADE.LoadTests/gatling/data:/opt/gatling/user-files/data:cached
+      - ./test/gatling/conf:/opt/gatling/conf:cached
+      - ./test/gatling/results:/opt/gatling/results
+      - ./test/gatling/simulations:/opt/gatling/user-files/simulations:cached
+      - ./test/gatling/data:/opt/gatling/user-files/data:cached
   ade-loadtesting-redis:
     image: ade-loadtesting-redis
     container_name: redis
     build:
-      context: ./test/ADE.LoadTests/redis
+      context: ./test/redis
       dockerfile: ./Dockerfile
     ports:
       - "6379:6379"
@@ -201,7 +201,7 @@ services:
     image: ade-loadtesting-influxdb
     container_name: influxdb
     build:
-      context: ./test/ADE.LoadTests/influxdb
+      context: ./test/influxdb
       dockerfile: ./Dockerfile
     ports:
       - "8083:8083"
@@ -211,7 +211,7 @@ services:
     image: ade-loadtesting-grafana
     container_name: grafana
     build:
-      context: ./test/ADE.LoadTests/grafana
+      context: ./test/grafana
       dockerfile: ./Dockerfile
     environment:
       - INFLUXDB_HOSTNAME

@@ -355,7 +355,7 @@ MigrationBackup/
 .metals
 *.personal.*
 /.vs
-test/ADE.LoadTests/gatling/results
+test/gatling/results
 .DS_Store
 Thumbs.db
 .temp

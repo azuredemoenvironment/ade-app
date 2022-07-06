@@ -18,7 +18,7 @@ class AdeSimulation extends Simulation {
   val overMinutes: Integer      = Integer.getInteger("overMinutes", 10)
 
   // User Agents
-  var userAgentString = "Gatling/3.5.1 (ADE.LoadTests)"
+  var userAgentString = "Gatling/3.5.1 (ade-loadtesting)"
 
   // Standard Header Info for GET Requests
   val baseHeaders = Map(
