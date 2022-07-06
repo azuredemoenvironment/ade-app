@@ -3,15 +3,15 @@ on:
   push:
     paths:
       - docker-compose.yml
-      - src/ADE.Services/**
       - .github/workflows/**
+      - test/**
 
-name: Build Container - ade-apigateway
+name: Build Container Image - ade-loadtesting-redis
 
 jobs:
   build-image:
-    name: Build and Publish Image
+    name: Build and Publish Image ade-loadtesting-redis
     uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
     with:
-      image_to_push: ade-apigateway
+      image_to_push: ade-loadtesting-redis
       tag_name: ${GITHUB_REF/refs\/tags\//}

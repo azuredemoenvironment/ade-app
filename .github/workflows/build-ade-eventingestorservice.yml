@@ -3,15 +3,15 @@ on:
   push:
     paths:
       - docker-compose.yml
-      - src/ADE.FrontEnd/**
       - .github/workflows/**
+      - src/ADE.Services/**
 
-name: Build Container - ade-frontend
+name: Build Container Image - ade-eventingestorservice
 
 jobs:
   build-image:
-    name: Build and Publish Image
+    name: Build and Publish Image ade-eventingestorservice
     uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
     with:
-      image_to_push: ade-frontend
+      image_to_push: ade-eventingestorservice
       tag_name: ${GITHUB_REF/refs\/tags\//}

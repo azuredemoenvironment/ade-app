@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - docker-compose.yml
+      - .github/workflows/**
+      - test/**
+
+name: Build Container Image - ade-loadtesting-gatling
+
+jobs:
+  build-image:
+    name: Build and Publish Image ade-loadtesting-gatling
+    uses: azuredemoenvironment/ade-app/.github/workflows/build-container-template.yml@brandonmartinez/issue/1-Move-ADE-App-Directories-to-This-Repository
+    with:
+      image_to_push: ade-loadtesting-gatling
+      tag_name: ${GITHUB_REF/refs\/tags\//}
