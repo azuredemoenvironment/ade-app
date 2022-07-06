@@ -15,4 +15,4 @@ jobs:
     with:
       image_to_push: @@IMAGE_NAME@@
       tag_name: ${GITHUB_REF/refs\/tags\//}
-      tag_latest: github.ref == 'refs/heads/main'
+      tag_latest: ${{github.ref == 'refs/heads/main'}}
