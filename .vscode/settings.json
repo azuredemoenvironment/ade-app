@@ -1,0 +1,37 @@
+{
+    "githubIssues.issueBranchTitle": "${user}/issue/${issueNumber}-${sanitizedIssueTitle}",
+    "githubIssues.queries": [
+        {
+            "label": "My Issues",
+            "query": "default"
+        },
+        {
+            "label": "Created Issues",
+            "query": "author:${user} state:open repo:${owner}/${repository} sort:created-desc"
+        },
+        {
+            "label": "Open Issues",
+            "query": "state:open repo:${owner}/${repository} sort:created-desc"
+        }
+    ],
+    "cSpell.enableFiletypes": [
+        "arm-template",
+        "azcli",
+        "bicep",
+        "dockerfile",
+        "powershell"
+    ],
+    "files.watcherExclude": {
+        "**/target": true
+    },
+    "vssolution.altSolutionFolders": [
+        "src",
+        "app"
+    ],
+    "markdownlint.config": {
+        "MD028": false,
+        "MD025": {
+            "front_matter_title": ""
+        }
+    }
+}
