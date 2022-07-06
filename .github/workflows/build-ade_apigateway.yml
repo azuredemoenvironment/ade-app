@@ -4,6 +4,7 @@ on:
     paths:
       - docker-compose.yml
       - src/ADE.Services/**
+      - .github/workflows/**
 
 name: Build Container - ade_apigateway
 

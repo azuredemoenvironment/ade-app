@@ -4,6 +4,7 @@ on:
     paths:
       - docker-compose.yml
       - src/ADE.FrontEnd/**
+      - .github/workflows/**
 
 name: Build Container - ade_frontend
 
