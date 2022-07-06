@@ -36,6 +36,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker-compose build ${{ inputs.image_to_push }}
+
       - name: Create Tag
         run: |
           IMAGE_TAG=$IMAGE_PATH:${{ inputs.tag_name }}
@@ -57,5 +58,5 @@ jobs:
         run: |
           echo "Pushing ${{ inputs.image_to_push }} to GitHub Container Registry"
           # Make characters lowercase
-          IMAGE_PUSH_PATH=$(echo $IMAGE_PATH | tr '[:upper:]' '[:lower:]')
+          IMAGE_PUSH_PATH=$(echo $IMAGE_PATH | tr '[:upper:]' '[:lower:]' | sed 's/[^a-zA-Z0-9]/-/g')
           docker push --all-tags $IMAGE_PUSH_PATH
