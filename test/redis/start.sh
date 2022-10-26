@@ -5,7 +5,7 @@ echo Starting Redis
 redis-server /usr/local/etc/redis/redis.conf
 
 DOWNLOADED_FILE=/opt/ade/data.txt
-FILE_TO_DOWNLOAD=http://deepyeti.ucsd.edu/jianmo/amazon/categoryFilesSmall/Grocery_and_Gourmet_Food_5.json.gz
+FILE_TO_DOWNLOAD=https://saadebrmareusaderes.blob.core.windows.net/loadtesting/adeloadtestingdataset.json.gz
 
 echo Downloading Data Set $FILE_TO_DOWNLOAD to $DOWNLOADED_FILE.gz
 
